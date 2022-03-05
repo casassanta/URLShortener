@@ -1,6 +1,7 @@
 package com.example.urlshortener.controller
 
-import com.example.urlshortener.controller.request.UrlShortenerRequest
+import com.example.urlshortener.controller.request.CreateShortLinkRequest
+import com.example.urlshortener.controller.response.ShortLinkResponse
 import com.example.urlshortener.service.UrlService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,7 +13,7 @@ class UrlController(
 ) {
 
     @PostMapping("api/shorteners")
-    fun shortenerUrl(@RequestBody url: UrlShortenerRequest): String{
-        return urlService.generateShortenerUrl(url)
+    fun shortenerUrl(@RequestBody url: CreateShortLinkRequest): ShortLinkResponse{
+        return urlService.generateShortLink(url).toShortLinkResponse()
     }
 }
