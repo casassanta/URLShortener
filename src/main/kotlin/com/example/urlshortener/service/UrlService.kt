@@ -1,6 +1,7 @@
 package com.example.urlshortener.service
 
 import com.example.urlshortener.controller.request.CreateShortLinkRequest
+import com.example.urlshortener.exception.InvalidShortLinkException
 import com.example.urlshortener.model.ShortLink
 import com.example.urlshortener.repository.UrlRepository
 import org.springframework.stereotype.Service
@@ -11,12 +12,12 @@ class UrlService(
 ) {
 
     fun generateShortLink(url: CreateShortLinkRequest): ShortLink {
+
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val code = (1..5)
             .map { _ -> kotlin.random.Random.nextInt(0, charPool.size) }
             .map(charPool::get)
             .joinToString("");
-
         val shortLink = ShortLink(
             destination = url.destination,
             code = code
@@ -25,6 +26,15 @@ class UrlService(
         urlRepository.save(shortLink)
 
         return shortLink
+    }
+
+    fun getLongLink(shortLink: String): String {
+
+        if (shortLink.contains("https://my.url/")) {
+            var code = shortLink.split("https://my.url/").last()
+            return urlRepository.getByCode(code).last().destination
+        } else
+            throw InvalidShortLinkException()
     }
 
 }

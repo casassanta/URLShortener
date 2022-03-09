@@ -12,8 +12,13 @@ class UrlController(
     private val urlService: UrlService
 ) {
 
-    @PostMapping("api/shorteners")
+    @PostMapping("api/longlinks")
     fun shortenerUrl(@RequestBody url: CreateShortLinkRequest): ShortLinkResponse{
         return urlService.generateShortLink(url).toShortLinkResponse()
+    }
+
+    @PostMapping("api/shortlinks")
+    fun getLongLink(@RequestBody shortLink: String): String{
+        return urlService.getLongLink(shortLink)
     }
 }

@@ -6,5 +6,6 @@ import java.util.UUID
 
 interface UrlRepository: JpaRepository<ShortLink, String> {
 
+    fun getByCode(code: String): List<ShortLink>
 
 }
